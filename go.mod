@@ -1,4 +1,4 @@
-module niexq-gowebapi
+module github.com/nie312122330/niexq-gowebapi
 
 go 1.15
 
