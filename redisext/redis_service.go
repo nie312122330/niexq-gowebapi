@@ -3,10 +3,10 @@ package redisext
 import (
 	"errors"
 	"fmt"
-	"niexq-gowebapi/ginext"
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/nie312122330/niexq-gotools/logext"
+	"github.com/nie312122330/niexq-gowebapi/ginext"
 	"go.uber.org/zap"
 )
 
