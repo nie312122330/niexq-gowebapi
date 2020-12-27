@@ -89,6 +89,14 @@ func (service *RedisService) ExpireKey(key string, sencond int) error {
 	return nil
 }
 
+// ClearKey 清理KEY
+func (service *RedisService) ClearKey(key string) error {
+	conn := service.RedisPool.Get()
+	defer conn.Close()
+	_, err := redis.Int(conn.Do("DEL", key))
+	return err
+}
+
 // ClearByKeyPrefix 清理指定前缀的KEY
 func (service *RedisService) ClearByKeyPrefix(keyPrefix string) (int, error) {
 	conn := service.RedisPool.Get()
