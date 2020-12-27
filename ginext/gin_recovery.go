@@ -5,12 +5,12 @@ import (
 	"net"
 	"net/http"
 	"net/http/httputil"
-	"niexq-gowebapi/vos"
 	"os"
 	"runtime/debug"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nie312122330/niexq-gowebapi/voext"
 )
 
 // GinRecovery recover掉项目可能出现的panic
@@ -39,15 +39,15 @@ func GinRecovery() gin.HandlerFunc {
 
 				//这里把错误输出出去
 				if vze, ok := err.(ValidZhError); ok {
-					result := vos.NewErrBaseResp(fmt.Sprintf("%v", vze.Err))
+					result := voext.NewErrBaseResp(fmt.Sprintf("%v", vze.Err))
 					result.ExtData = vze.ZhErr
 					c.JSON(http.StatusOK, &result)
 				} else if vze, ok := err.(RunTimeError); ok {
-					result := vos.NewErrBaseResp(fmt.Sprintf("%v", vze.Err))
+					result := voext.NewErrBaseResp(fmt.Sprintf("%v", vze.Err))
 					c.JSON(http.StatusOK, &result)
 				} else {
 					logger.Error(fmt.Sprintf("%s\t异常:%v\n%s\n%s", reqPath, err, string(httpRequest), debug.Stack()))
-					result := vos.NewErrBaseResp(fmt.Sprintf("%v", err))
+					result := voext.NewErrBaseResp(fmt.Sprintf("%v", err))
 					c.JSON(http.StatusOK, &result)
 				}
 				c.Abort()

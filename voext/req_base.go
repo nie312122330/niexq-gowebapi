@@ -1,4 +1,4 @@
-package vos
+package voext
 
 // BaseReq ...
 type BaseReq struct {

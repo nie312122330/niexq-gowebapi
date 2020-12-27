@@ -1,4 +1,4 @@
-package vos
+package voext
 
 import (
 	"github.com/nie312122330/niexq-gotools/dateext"
