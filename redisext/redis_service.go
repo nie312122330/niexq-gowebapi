@@ -29,7 +29,7 @@ func (service *RedisService) PutStr(key string, val string) error {
 	if nil != err {
 		return err
 	}
-	if "OK" != resp {
+	if resp != "OK" {
 		return errors.New("未返回OK")
 	}
 	return nil
@@ -43,7 +43,7 @@ func (service *RedisService) PutExStr(key string, val string, sencond int) error
 	if nil != err {
 		return err
 	}
-	if "OK" != resp {
+	if resp != "OK" {
 		return errors.New("未返回OK")
 	}
 	return nil
@@ -57,7 +57,7 @@ func (service *RedisService) PutNxExStr(key string, val string, sencond int) err
 	if nil != err {
 		return err
 	}
-	if "OK" != resp {
+	if resp != "OK" {
 		return errors.New("未返回OK")
 	}
 	return nil
@@ -68,7 +68,7 @@ func (service *RedisService) GetStr(key string) (string, error) {
 	conn := service.RedisPool.Get()
 	defer conn.Close()
 	val, err := redis.String(conn.Do("GET", key))
-	if nil != err {
+	if err != nil {
 		return "", err
 	}
 	return val, nil
@@ -79,7 +79,7 @@ func (service *RedisService) ExpireKey(key string, sencond int) error {
 	conn := service.RedisPool.Get()
 	defer conn.Close()
 	resp, err := redis.Int64(conn.Do("EXPIRE", key, sencond))
-	if nil != err {
+	if err != nil {
 		return err
 	}
 	if resp <= 0 {
