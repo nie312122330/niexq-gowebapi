@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gomodule/redigo/redis"
+	"github.com/nie312122330/niexq-gotools/logext"
 )
 
 // RedisPool Redis连接池
@@ -13,8 +14,8 @@ var redisPool *redis.Pool
 var redisService *RedisService
 
 func init() {
-	redisHost := "101.132.133.78"
-	redisPort := 6380
+	redisHost := "8.137.54.220"
+	redisPort := 6379
 	redisPwd := "Nxq@198943"
 
 	redisIdleTimeout := 100
@@ -49,6 +50,7 @@ func init() {
 }
 
 func TestMutex(t *testing.T) {
+	logext.LogTracdIdThreadLocal.Set("1111")
 	mutex := NewMutex("lock1", redisService)
 	if mutex.Lock() {
 		defer mutex.ReleseLock()

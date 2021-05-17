@@ -28,7 +28,7 @@ func init() {
 	zh_translations.RegisterDefaultTranslations(validate, trans)
 }
 
-//ValidReq 抛出参数验证的错误
+// ValidReq 抛出参数验证的错误
 func ValidReq(c *gin.Context, obj interface{}) {
 	if err := c.ShouldBindJSON(obj); err != nil {
 		if verrs, ok := err.(validator.ValidationErrors); ok {
@@ -46,7 +46,7 @@ func ValidReq(c *gin.Context, obj interface{}) {
 	}
 }
 
-//Translate 翻译错误信息
+// Translate 翻译错误信息
 func Translate(verrs *validator.ValidationErrors) map[string][]string {
 	var result = make(map[string][]string)
 	for _, err := range *verrs {

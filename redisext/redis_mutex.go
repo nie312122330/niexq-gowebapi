@@ -2,6 +2,7 @@ package redisext
 
 import (
 	"fmt"
+	"log/slog"
 	"net"
 	"time"
 
@@ -40,16 +41,16 @@ type Mutex struct {
 	curTries int
 }
 
-//Lock ...
+// Lock ...
 func (m *Mutex) Lock() bool {
 	err := m.redisService.PutNxExStr(m.name, m.value, int(m.expiry.Seconds()))
 	if nil != err {
 		if netError := err.(net.Error); netError != nil {
-			logger.Error(fmt.Sprintf("获取Redis锁失败,%s", netError.Error()))
+			slog.Error(fmt.Sprintf("获取Redis锁失败,%s", netError.Error()))
 			return false
 		}
 		if m.curTries > m.tries {
-			logger.Error(fmt.Sprintf("获取Redis锁失败,当前第%d次获取,总次数%d\n", m.curTries, m.tries))
+			slog.Error(fmt.Sprintf("获取Redis锁失败,当前第%d次获取,总次数%d\n", m.curTries, m.tries))
 			return false
 		}
 		m.curTries++
@@ -59,15 +60,12 @@ func (m *Mutex) Lock() bool {
 	return true
 }
 
-//ReleseLock ...
+// ReleseLock ...
 func (m *Mutex) ReleseLock() bool {
 	conn := m.redisService.RedisPool.Get()
 	defer conn.Close()
 	_, err := redis.Int(luaDelScript.Do(conn, m.name, m.value))
-	if err == nil {
-		return true
-	}
-	return false
+	return err == nil
 }
 
 // NewMutex ...
@@ -97,10 +95,10 @@ func (f OptionFunc) Apply(mutex *Mutex) {
 	f(mutex)
 }
 
-//OptionFunc 配置方法
+// OptionFunc 配置方法
 type OptionFunc func(*Mutex)
 
-//SetExpiry 设置 锁最多可以占用的时间，超过自动解锁
+// SetExpiry 设置 锁最多可以占用的时间，超过自动解锁
 func SetExpiry(expiry time.Duration) Option {
 	return OptionFunc(func(m *Mutex) {
 		m.expiry = expiry
@@ -114,7 +112,7 @@ func SetTries(tries int) Option {
 	})
 }
 
-//SetDelay 设置获取锁失败后等待多少时间后重试
+// SetDelay 设置获取锁失败后等待多少时间后重试
 func SetDelay(expiry time.Duration) Option {
 	return OptionFunc(func(m *Mutex) {
 		m.expiry = expiry
