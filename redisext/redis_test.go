@@ -57,7 +57,6 @@ func TestMutex(t *testing.T) {
 		//执行逻辑
 		fmt.Println("第1个获取到了")
 	}
-
 }
 
 func TestScanByCur(t *testing.T) {

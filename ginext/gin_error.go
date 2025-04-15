@@ -12,7 +12,7 @@ type ValidZhError struct {
 	ZhErr map[string][]string
 }
 
-//Error 实现Error接口
+// Error 实现Error接口
 func (e *ValidZhError) Error() string {
 	jsonStr, _ := jsonext.ToStr(e.ZhErr)
 	return fmt.Sprintf("%s%s", e.Err, jsonStr)
@@ -23,7 +23,7 @@ type RunTimeError struct {
 	Err string
 }
 
-//Error 实现Error接口
+// Error 实现Error接口
 func (e *RunTimeError) Error() string {
-	return fmt.Sprintf("%s", e.Err)
+	return e.Err
 }

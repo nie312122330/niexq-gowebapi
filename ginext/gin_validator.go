@@ -23,13 +23,13 @@ func init() {
 	uni = ut.New(zh, zh)
 	trans, _ = uni.GetTranslator("zh")
 	//获取gin的校验器
-	validate := binding.Validator.Engine().(*validator.Validate)
+	validate = binding.Validator.Engine().(*validator.Validate)
 	//注册翻译器
 	zh_translations.RegisterDefaultTranslations(validate, trans)
 }
 
 // ValidReq 抛出参数验证的错误
-func ValidReq(c *gin.Context, obj interface{}) {
+func ValidReq(c *gin.Context, obj any) {
 	if err := c.ShouldBindJSON(obj); err != nil {
 		if verrs, ok := err.(validator.ValidationErrors); ok {
 			throwErr := ValidZhError{Err: "参数验证失败", ZhErr: Translate(&verrs)}
