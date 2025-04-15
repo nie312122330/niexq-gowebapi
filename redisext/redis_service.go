@@ -132,3 +132,19 @@ func scanKeysWithConn(conn redis.Conn, cur int, keyPattner string, lastKeys []st
 	}
 	return nil, err
 }
+
+// 自增
+func (service *RedisService) Incr(key string, expireMillisecond int64) (num int64, err error) {
+	conn := service.RedisPool.Get()
+	defer conn.Close()
+	script := redis.NewScript(1,
+		`local current = redis.call('incr',KEYS[1]);
+		 local t = redis.call('ttl',KEYS[1]); 
+		 if t == -1 then
+		 	redis.call('pexpire',KEYS[1],ARGV[1])
+		 end;
+		 return current
+	`)
+	resp, err := redis.Int64(script.Do(conn, key, expireMillisecond))
+	return resp, err
+}

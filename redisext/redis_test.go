@@ -107,3 +107,12 @@ func TestExpireKey(t *testing.T) {
 		fmt.Println("更新成功")
 	}
 }
+
+func TestIncr(t *testing.T) {
+	num, err := redisService.Incr("aaaa", 10000)
+	if nil != err {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println(num)
+	}
+}
